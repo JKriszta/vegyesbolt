@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+		integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+
+	<title>Termékek Listája</title>
+	<style>
+		h1 {
+			margin: 30px;
+			font-variant: small-caps;
+		}
+
+		.itemNameDiv {
+			height: 120px;
+		}
+
+		.leiras {
+			font-size: 0.6rem;
+			height: 200px;
+		}
+
+		.osszetevok {
+			font-size: 0.6rem;
+		}
+
+		.info {
+			font-weight: bold;
+		}
+
+		.vonalkod {
+			font-size: 0.7rem;
+		}
+	</style>
+</head>
+
+<body class="">
+
+	<div class='d-flex justify-content-center bg-dark border-bottom border-danger'>
+		<h1 class="text-info">Termékek</h1>
+	</div>
+
+	<div class="container-xxl bg-dark p-3"></div>
+
+
+
+
+	<script>
+		fetch('./data2.json')
+			.then(response => response.json())
+			.then(data => {
+				console.log(data)
+				// call function
+				renderItems(data)
+			})
+
+		function renderItems(obj) {
+
+
+			// tárolódiv a sorokhoz
+			let divRow = document.createElement('div')
+			divRow.classList.add('row', 'd-flex', 'justify-content-center')
+			document.querySelector('.container-xxl').appendChild(divRow)
+
+
+			//2. módszer
+
+			for (let o of obj) {
+
+				// catch number of image in the image link
+				let imgLink = o['Kép URL kód']
+				let id = (imgLink.slice(-8)).replace('.jpg', '');
+
+				// <div class='text-center mt-2 font-weight-bold border-top border-bottom border-danger'>ID: ${eval(o.ID)}</div>
+
+				document.querySelector('.row').innerHTML += `
+				<div class="col-md-4 col-lg-2 col-6 mb-3 m-50 shadow shadow-intensity-xl rounded mr-3 bg-info bg-gradient">
+					<div class='itemNameDiv'>
+					<h6 class='text-center font-weight-bold pt-2'>${o['Termék teljes neve (Magyar)']}</h6>
+					</div>
+
+					<div class='vonalkod text-center mt-1 mb-2 border-bottom border-top border-danger'>Vonalkód: ${o['EAN kód (Vonalkód)']}</div>
+					<div class='imgDiv pb-0'>
+					<a href="${o['Kép URL kód']}" target="_blank"><img class='img-thumbnail shadow' src="${o['Kép URL kód']}" alt=""></a>
+					</div>
+							<p class='leiras text-center font-italic mt-1'>${o['Termék rövid leírása (Magyar)']}</p>
+
+
+
+							<div class='info'>Ár: <span class="" style="float:right;">${o['Termék ára']}</span></div>
+							<div class='info border-top border-danger'>Kiszerelés: <span class="" style="float:right;">${o['Űrmérték számmal (pl. 4g - tehát 4)']} ${o['Űrmérték']}</span></div>
+							<div class='info'>Csomagban: <termék class="" style="float:right;">${o['Csomagban lévő temékek száma, ha 1 db-nál több (pl. 4x80g - ebben az esetben 4)']} termék</span></div>
+							<div class='info border-bottom border-danger'>max. <span class="" style="float:right;">${o['Maximum eladási darab']} db</span></div>
+
+
+							<div class="text-center osszetevok"><span class="font-weight-bold">Összetevők</span> <br>${o['Összetevők (Magyar)']}</div>
+
+
+							
+
+
+
+					</div>
+
+				
+				
+				
+				`
+			}
+		}
+	</script>
+
+</body>
+
+</html>
